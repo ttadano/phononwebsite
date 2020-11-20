@@ -17,13 +17,22 @@ class AlamodePhonon(Phonon):
         prefix: <prefix>.evec.hdf5 file containing polarization vectors
     """
 
-    def __init__(self, filename, name, reps=(3, 3, 3), reorder=False, highsym_qpts=None, folder='.'):
+    def __init__(self,
+                 filename,
+                 name,
+                 reps=(3, 3, 3),
+                 reorder=False,
+                 highsym_qpts=None,
+                 band_range=None,
+                 folder='.'):
+
         self.reps = reps
         self.name = name
         self.folder = folder
         self.filename = "%s/%s" % (folder, filename)
         self.highsym_qpts = highsym_qpts
         self.atomic_masses = None
+        self.band_range = band_range
 
         # if the file already exists then we read it
         if os.path.isfile(self.filename):
@@ -65,6 +74,20 @@ class AlamodePhonon(Phonon):
         # so we always scale the eigenvectors with the atomic masses in the javascript of the website
         # here we scale then with sqrt(m) so that we recover the correct scalling on the website
         vectors = np.reshape(vectors, (self.nqpoints, self.nphons, self.natoms, 3, 2))
+
+        if self.band_range:
+            iband_s, iband_e = [int(i) for i in self.band_range.strip().split()]
+            iband_s -= 1
+
+            if iband_s < 0:
+                iband_s = 0
+
+            if iband_e > self.nphons:
+                iband_e = self.nphons
+
+            vectors = vectors[:,iband_s:iband_e,:,:,:]
+            self.nphons = iband_e - iband_s
+            self.eigenvalues = self.eigenvalues[:,iband_s:iband_e]
 
         for na in range(self.natoms):
            vectors[:,:,na,:,:] /= sqrt(self.atomic_masses[na])
