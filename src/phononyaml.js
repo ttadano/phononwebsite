@@ -21,7 +21,7 @@ export class PhononYaml {
 
     static getYaml(tags,object,noerror=false) {
         /*
-        check if the tags are present and if so return their value 
+        check if the tags are present and if so return their value
         */
 
         let ntags = tags.length;
@@ -47,7 +47,7 @@ export class PhononYaml {
         function onLoadEndHandler() {
             this.getFromString(yaml_reader.result,callback);
         }
- 
+
         //read the files
         yaml_reader.onloadend = onLoadEndHandler.bind(this);
         yaml_reader.readAsText(file);
@@ -255,7 +255,7 @@ export class PhononYaml {
             qpoint += size_segment;
             check_high_sym_qpoint(phonon[qpoint-1],this.highsym_qpts);
         }
-        
+
         //get average mass (for normalization purposes)
         let average_mass = 0;
         let sqrt_atom_masses = [];
@@ -288,6 +288,8 @@ export class PhononYaml {
         }
 
         this.addatomphase = true;
+        this.average_mass = average_mass;
+        this.mode_amplitude_convention = 'avg-mass-normalized';
         this.lat = lat;
         this.repetitions = utils.getReasonableRepetitions(this.natoms,lat);
     }

@@ -1,0 +1,27 @@
+Here are some instructions to compile and run the code locally.
+
+Build
+====================
+
+Install dependencies:
+```
+npm install
+```
+
+Build the local/debug site bundle:
+```
+npm run build
+```
+
+Build the deployable website:
+```
+npm run build:site
+```
+
+Test
+====================
+To run phononwebsite locally, build first and then run
+```
+npm run build
+python -m http.server
+```

@@ -1,0 +1,60 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "build:site",
+      "label": "build:site",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "type": "npm",
+      "script": "build:debug",
+      "label": "build:debug",
+      "problemMatcher": []
+    },
+    {
+      "label": "serve",
+      "type": "shell",
+      "command": "python3",
+      "args": [
+        "-m",
+        "http.server",
+        "8000",
+        "--bind",
+        "127.0.0.1"
+      ],
+      "isBackground": true,
+      "dependsOn": [
+        "build:debug"
+      ],
+      "dependsOrder": "sequence",
+      "options": {
+        "cwd": "${workspaceFolder}/build"
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      },
+      "runOptions": {
+        "reevaluateOnRerun": true
+      },
+      "problemMatcher": {
+        "owner": "custom",
+        "pattern": {
+          "regexp": ".*"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".*",
+          "endsPattern": "Serving HTTP on 127\\.0\\.0\\.1 port 8000"
+        }
+      }
+    }
+  ]
+}

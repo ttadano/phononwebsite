@@ -1,23 +1,36 @@
 {
   "name": "phononwebsite",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Javascript web app to visualise lattice vibrations",
-  "main": "build/phononwebsite.js",
+  "main": "build/main.js",
   "directories": {
     "doc": "doc",
-    "test": "tests"
+    "test": "test"
   },
   "dependencies": {
-    "assert": "^1.4.1"
+    "highcharts": "12.2.0",
+    "jquery": "3.7.1",
+    "js-yaml": "4.1.0",
+    "pako": "^2.1.0",
+    "three": "^0.182.0"
   },
   "devDependencies": {
-    "chai": "^4.1.2",
-    "mocha": "^5.0.0"
+    "@rollup/plugin-commonjs": "^28.0.3",
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "jsdom": "^24.1.3",
+    "rollup": "^2.79.0",
+    "terser": "^5.44.0"
   },
   "scripts": {
-    "test": "mocha",
-    "build": "rollup -c",
-    "build-uglify": "rollup -c && uglifyjs build/phononwebsite.js -cm > build/phononwebsite.min.js"
+    "generate:index": "mkdir -p build && python3 python/phononweb/scripts/render_homepage.py --output build/index.html",
+    "build": "sh ./scripts/build-debug.sh",
+    "build:debug": "npm run build",
+    "build:site": "sh ./scripts/build-site.sh",
+    "test": "npm run build:site && node --test --test-force-exit test/*.test.mjs",
+    "test:browser": "PLAYWRIGHT_SMOKE=1 node --test --test-force-exit test/browser-smoke.test.mjs",
+    "test:py": "python3 -m pytest python/phononweb/tests -q",
+    "prepare:phonondb": "python3 python/phononweb/scripts/prepare_phonondb.py",
+    "prepare:phonondb:local": "python3 python/phononweb/scripts/prepare_phonondb.py --output-dir data/phonondb2017 --manifest data/phonondb2017/models.json --band-points 15 --skip-existing"
   },
   "repository": {
     "type": "git",
@@ -38,5 +51,8 @@
   "bugs": {
     "url": "https://github.com/henriquemiranda/phononwebsite/issues"
   },
-  "homepage": "https://github.com/henriquemiranda/phononwebsite#readme"
+  "homepage": "https://github.com/henriquemiranda/phononwebsite#readme",
+  "overrides": {
+    "serialize-javascript": "7.0.5"
+  }
 }

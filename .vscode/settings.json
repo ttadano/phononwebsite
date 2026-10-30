@@ -1,0 +1,13 @@
+{
+  "files.associations": {
+    "src/poscar.js": "javascript"
+  },
+  "python.defaultInterpreterPath": "/opt/local/bin/python3",
+  "python.analysis.extraPaths": [
+    "./python"
+  ],
+  "python.analysis.autoSearchPaths": true,
+  "python.analysis.diagnosticSeverityOverrides": {
+    "reportMissingModuleSource": "none"
+  }
+}

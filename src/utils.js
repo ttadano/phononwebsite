@@ -1,7 +1,7 @@
 import * as mat from './mat.js';
 
 export function getCombinations(elements) {
-    /* 
+    /*
     Get combintations 2 by two based on:
     http://stackoverflow.com/questions/29169011/javascript-arrays-finding-the-number-of-combinations-of-2-elements
     */
@@ -25,11 +25,11 @@ export function rec_lat(lat) {
     b1 = mat.vec_scale(b1,1/v);
     b2 = mat.vec_scale(b2,1/v);
     b3 = mat.vec_scale(b3,1/v);
-    return [b1,b2,b3] 
+    return [b1,b2,b3]
 }
 
 export function point_in_list(point,points) {
-    /* 
+    /*
     Return the index of the point if it is present in a list of points
     */
     for (let i=0; i<points.length; i++) {
@@ -68,7 +68,10 @@ export function get_formula(atom_types) {
     //make the name from the counter
     let name = "";
     for (let element in counts) {
-        name += element+counts[element];
+        name += element;
+        if (counts[element] !== 1) {
+            name += counts[element];
+        }
     }
     return name;
 }
@@ -76,20 +79,20 @@ export function get_formula(atom_types) {
 export function getReasonableRepetitions(natoms,lat) {
     /*
     choose a reasonable number of repetitions
-    Some logic can be implemented here to improve 
+    Some logic can be implemented here to improve
     in which directions the repetitions are made
     */
 
-    if (natoms < 4)        { return [3,3,3] };
-    if (4 < natoms < 15)   { return [2,2,2] };
-    if (15 < natoms < 50)  { return [2,2,1] };
-    if (50 < natoms)       { return [1,1,1] };
+    if (natoms <= 4)                              { return [3,3,3]; }
+    if (natoms > 4 && natoms <= 15)              { return [2,2,2]; }
+    if (natoms > 15 && natoms <= 50)             { return [2,2,1]; }
+    return [1,1,1];
 
 }
 
 export function subscript_numbers(old_string) {
-    string = "";
-    for (a of old_string) {
+    let string = "";
+    for (const a of old_string) {
         if (!isNaN(a)) {
             string += "<sub>"+a+"</sub>";
         }
@@ -98,4 +101,25 @@ export function subscript_numbers(old_string) {
         }
     }
     return string;
+}
+
+export function normalize_formula_string(value) {
+    if (typeof value !== 'string' || !value) {
+        return value;
+    }
+
+    if (!/^(?:[A-Z][a-z]?\d*)+$/.test(value)) {
+        return value;
+    }
+
+    return value.replace(/([A-Z][a-z]?)(\d*)/g, function(match, element, count) {
+        if (!count || count === '1') {
+            return element;
+        }
+        return element + count;
+    });
+}
+
+export function format_formula_html(value) {
+    return subscript_numbers(normalize_formula_string(value));
 }

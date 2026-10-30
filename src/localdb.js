@@ -1,5 +1,5 @@
 export class LocalDB {
-    /* 
+    /*
     Interact with the local database of phonons
     Hosted on Github
     */
@@ -16,7 +16,7 @@ export class LocalDB {
     }
 
     get_materials(callback) {
-        /* 
+        /*
         this function load the materials from a certain source and returns then to the callback
         Some pre-processing of the data might be required and can be implemented here
         */
@@ -38,7 +38,7 @@ export class LocalDB {
             callback(materials)
         }
 
-        $.get('localdb/models.json', dothings);
+        $.get('data/localdb/models.json', dothings);
     }
 
 }

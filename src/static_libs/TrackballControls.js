@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 /**
  * @author Eberhard Graether / http://egraether.com/
  * @author Mark Lundin 	/ http://mark-lundin.com
@@ -631,5 +633,5 @@ var TrackballControls = function ( object, domElement ) {
 };
 
 TrackballControls.prototype = Object.create( THREE.EventDispatcher.prototype );
-TrackballControls.prototype.constructor = THREE.TrackballControls;
+TrackballControls.prototype.constructor = TrackballControls;
 export { TrackballControls }

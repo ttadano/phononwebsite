@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run phononwebsite",
+      "type": "pwa-chrome",
+      "request": "launch",
+      "url": "http://localhost:8000/phonon.html",
+      "webRoot": "${workspaceFolder}",
+      "preLaunchTask": "serve"
+    }
+  ]
+}

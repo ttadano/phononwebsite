@@ -13,6 +13,8 @@
 		<meta name="date" content="2014-07-25">
 
 		<!-- CSS Design-->
+		<link rel="icon" type="image/svg+xml" href="favicon.svg">
+		<link rel="icon" type="image/x-icon" href="favicon.ico">
 		<link href="css/style.css" type="text/css" rel="stylesheet">
 
 		<!-- Meta tags symbols -->
@@ -32,17 +34,121 @@
 </head>
 
 <body>
-
-<header>
+<div class="container">
 	<ul class="navigation">
-		<li><a href="index.html">Home</a></font></li>
-		<li><a href="phonon.html">Phonons</a></font></li>
+		<li><a href="index.html">Home</a></li>
+		<li><a href="phonon.html">Phonons</a></li>
+		<li><a href="exciton.html">Excitons</a></li>
+		<li><a href="structure.html">Structures</a></li>
 	</ul>
-</header>
-
-<section>
+	<div class="flex-container homepage-layout">
+		<div class="flex-menu">
+			<div id="menu">
+				<div id="material-list" class="homepage-menu-panel" aria-label="Page sections">
+					<h3>Sections:</h3>
+					<nav id="homepage-sections"></nav>
+				</div>
+			</div>
+		</div>
+		<div class="flex-vibcrystal homepage-content-panel">
+			<div id="homepage-panel">
+				<article class="homepage-content" id="homepage-content">
 PANDOC
-</section>
+				</article>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+(() => {
+	const content = document.getElementById('homepage-content');
+	const panel = document.getElementById('homepage-panel');
+	const toc = document.getElementById('homepage-sections');
+	if (!content || !toc || !panel) {
+		return;
+	}
+
+	const headings = Array.from(content.querySelectorAll('h1[id], h2[id], h3[id]'));
+	if (!headings.length) {
+		return;
+	}
+
+	const list = document.createElement('ul');
+	list.className = 'homepage-toc-list';
+
+	const items = [];
+	for (const heading of headings) {
+		const item = document.createElement('li');
+		item.className = `homepage-toc-item level-${heading.tagName.toLowerCase()}`;
+
+		const link = document.createElement('a');
+		link.href = `#${heading.id}`;
+		link.textContent = heading.textContent;
+
+		item.appendChild(link);
+		list.appendChild(item);
+		items.push({ heading, link });
+	}
+
+	toc.appendChild(list);
+
+	const setActive = (id) => {
+		for (const { link } of items) {
+			link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
+		}
+	};
+
+	for (const { heading, link } of items) {
+		link.addEventListener('click', () => {
+			setActive(heading.id);
+		});
+	}
+
+	const updateActiveFromPanel = () => {
+		const panelTop = panel.getBoundingClientRect().top;
+		let activeHeading = headings[0];
+		for (const heading of headings) {
+			const relativeTop = heading.getBoundingClientRect().top - panelTop;
+			if (relativeTop <= 80) {
+				activeHeading = heading;
+			} else {
+				break;
+			}
+		}
+		setActive(activeHeading.id);
+	};
+
+	if ('IntersectionObserver' in window) {
+		const observer = new IntersectionObserver(() => {
+			updateActiveFromPanel();
+		}, {
+			root: panel,
+			rootMargin: '-15% 0px -70% 0px',
+			threshold: [0, 1]
+		});
+
+		for (const { heading } of items) {
+			observer.observe(heading);
+		}
+	} else {
+		panel.addEventListener('scroll', updateActiveFromPanel, { passive: true });
+	}
+
+	window.addEventListener('hashchange', () => {
+		if (window.location.hash) {
+			setActive(window.location.hash.slice(1));
+		}
+	});
+
+	if (window.location.hash) {
+		setActive(window.location.hash.slice(1));
+	} else {
+		setActive(headings[0].id);
+	}
+	updateActiveFromPanel();
+})();
+</script>
 
 </body>
 

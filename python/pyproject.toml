@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools","numpy"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "phononwebsite"
+version = "0.2"
+description = "Read Abinit, Quantum Espresso, Phonopy, VASP and ALAMODE phonon dispersions to visualize on the phonon website."
+authors = [
+    { name="Henrique Miranda", email="miranda.henrique@gmail.com" }
+]
+readme = ""
+requires-python = ">=3.7"
+dependencies = [
+    "numpy",
+    "PyYAML",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8", "phonopy", "seekpath", "h5py"]
+alamode = ["h5py"]
+
+[project.scripts]
+read_qe_phonon = "phononweb.scripts.read_qe_phonon:main"
+read_anaddb_phonon = "phononweb.scripts.read_anaddb_phonon:main"
+read_vasp_phonon = "phononweb.scripts.read_vasp_phonon:main"
+read_alamode_phonon = "phononweb.scripts.read_alamode_phonon:main"
+phononwebsite = "phononweb.scripts.phononwebsite:main"
+prepare_phonondb = "phononweb.scripts.prepare_phonondb:main"
+export_phonopy_runtime = "phononweb.scripts.export_phonopy_runtime:main"
+
+[project.urls]
+"Homepage" = "https://henriquemiranda.github.io/phononwebsite/"
+"Bug Tracker" = "https://github.com/henriquemiranda/phononwebsite/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+
+[tool.pytest.ini_options]
+testpaths = ["phononweb/tests"]
